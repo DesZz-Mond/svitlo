@@ -2,74 +2,80 @@
 <html lang="uk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0a1220">
-<title>Світло на Кіровоградщині: графік відключень</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b14">
+<title>Світло Кіровоградщини: графік відключень</title>
 <meta name="description" content="Графік відключень світла для ваших адрес на Кіровоградщині">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
 <style>
-:root{--bg:#eef2f8;--card:#fff;--ink:#0f1b2d;--mute:#5d6b82;--on:#12b386;--off:#f29a0c;--na:#c3cbd8;--line:#dce3ee;--accent:#2f6bff;color-scheme:light}
-@media(prefers-color-scheme:dark){:root{--bg:#0a1220;--card:#121d31;--ink:#e9effc;--mute:#8d9fbd;--on:#2fd6a6;--off:#ffb23e;--na:#2b3a54;--line:#22314b;--accent:#6c9bff;color-scheme:dark}}
+:root{color-scheme:dark;--bg:#070b14;--ink:#f3f5fb;--mute:#8d99b3;--glass:rgba(255,255,255,.05);--bd:rgba(255,255,255,.1);--on1:#1d8f8c;--on2:#43e0cf;--off1:#ffd27a;--off2:#f0980d;--na:#2c3750;--gold:#ffc964;--ont:#43e0cf;--tick:rgba(255,255,255,.3);--face:rgba(255,255,255,.03);--g1:rgba(255,190,90,.13);--g2:rgba(80,110,255,.15)}
+@media(prefers-color-scheme:light){:root{color-scheme:light;--bg:#eef1f7;--ink:#0c1426;--mute:#5a6783;--glass:rgba(255,255,255,.72);--bd:rgba(12,20,38,.1);--on1:#0f8f84;--on2:#2cc9b5;--off1:#ffc247;--off2:#e58a00;--na:#cdd5e2;--gold:#a86400;--ont:#07766b;--tick:rgba(12,20,38,.35);--face:rgba(12,20,38,.03);--g1:rgba(255,190,90,.28);--g2:rgba(80,110,255,.12)}}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:16px/1.45 "Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;min-height:100vh;padding:0 16px 40px}
-main,header,footer{max-width:720px;margin:0 auto}
-header{padding:28px 0 14px}
-h1{font-size:clamp(26px,6vw,38px);line-height:1.1;margin:0 0 6px;letter-spacing:-.02em;font-weight:800}
-#upd{margin:0;color:var(--mute);font-size:14px}
-form{display:flex;flex-wrap:wrap;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px}
+body{min-height:100vh;color:var(--ink);background:radial-gradient(900px 520px at 6% -8%,var(--g1),transparent 60%),radial-gradient(800px 520px at 100% 100%,var(--g2),transparent 60%),var(--bg);background-attachment:fixed;font:16px/1.45 "Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;padding:0 16px 40px}
+main,header,footer{max-width:980px;margin:0 auto}
+header{display:flex;align-items:center;gap:14px;padding:30px 0 18px}
+.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,var(--off1),var(--off2));color:#1b1200;box-shadow:0 8px 24px -8px var(--off2);flex:none}
+.logo svg{width:26px;height:26px}
+h1{margin:0;font-size:clamp(24px,5vw,34px);font-weight:300;letter-spacing:-.025em;line-height:1.1}
+#upd{margin:4px 0 0;color:var(--mute);font-size:14px;display:flex;align-items:center;gap:8px}
+#dot{width:8px;height:8px;border-radius:50%;background:var(--na);flex:none}
+.glass,.card,.tabs{background:var(--glass);border:1px solid var(--bd);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+form{display:flex;flex-wrap:wrap;gap:8px;padding:10px;border-radius:22px}
 input,select,button{font:inherit;color:inherit}
-input,select{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:11px 12px;min-width:0}
-input{flex:1 1 200px}
-select{flex:0 0 auto}
-form button{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:11px 20px;font-weight:700;cursor:pointer}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.hint{color:var(--mute);font-size:14px;margin:10px 4px 0}
-.hint a{color:var(--accent)}
+input,select{border:1px solid var(--bd);background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:14px;padding:12px 14px;min-width:0}
+input{flex:1 1 220px}
+form button{background:linear-gradient(145deg,var(--off1),var(--off2));color:#1b1200;font-weight:700;border:0;border-radius:14px;padding:12px 24px;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.hint{color:var(--mute);font-size:14px;margin:10px 6px 0}
+.hint a{color:var(--gold)}
 #warn{margin-top:14px}
-.w{background:color-mix(in srgb,var(--off) 18%,transparent);border:1px solid var(--off);border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:8px}
-.tabs{display:flex;gap:6px;margin:22px 0 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;width:max-content}
-.tabs button{border:0;background:none;padding:8px 18px;border-radius:10px;cursor:pointer;font-weight:600;color:var(--mute)}
-.tabs button.on{background:var(--accent);color:#fff}
-.card{--c:var(--na);background:var(--card);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:20px;padding:18px 18px 16px;margin-bottom:14px}
-.card.on{--c:var(--on)}.card.off{--c:var(--off)}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.w{background:color-mix(in srgb,var(--off2) 16%,transparent);border:1px solid color-mix(in srgb,var(--off2) 60%,transparent);border-radius:14px;padding:10px 14px;font-size:14px;margin-bottom:8px}
+.bar2{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin:24px 0 14px}
+.tabs{display:flex;gap:4px;border-radius:16px;padding:4px}
+.tabs button{border:0;background:none;padding:9px 20px;border-radius:12px;cursor:pointer;font-weight:600;color:var(--mute)}
+.tabs button.on{background:linear-gradient(145deg,var(--off1),var(--off2));color:#1b1200}
+#dt{color:var(--mute);font-size:15px}
+#dt::first-letter{text-transform:uppercase}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:16px}
+.card{--c:var(--na);border-radius:28px;padding:18px 18px 20px;overflow:hidden}
+.card.on{--c:var(--on2)}.card.off{--c:var(--off2)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .nm{font-weight:600;overflow-wrap:anywhere}
-.q{display:flex;align-items:center;gap:8px;flex:none}
-.q b{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:13px;color:var(--mute)}
+.q{display:flex;align-items:center;gap:6px;flex:none}
+.q b{font-size:12px;font-weight:600;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:999px;padding:3px 10px}
 .q button{border:0;background:none;color:var(--mute);font-size:22px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:8px}
-.big{font-size:clamp(30px,8vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:10px 0 4px;color:var(--c)}
-.card.na .big{color:var(--mute)}
-.sub{color:var(--mute);margin:0 0 16px;font-variant-numeric:tabular-nums}
-.track{position:relative}
-.bar{display:grid;grid-template-columns:repeat(48,1fr);gap:1px;height:36px;border-radius:10px;overflow:hidden}
-.bar i{background:var(--on);opacity:.8}
-.bar i.off{background:var(--off);opacity:1}
-.bar i.na{background:repeating-linear-gradient(45deg,var(--na),var(--na) 3px,transparent 3px,transparent 6px);opacity:1}
-.now{position:absolute;top:-5px;bottom:-5px;width:4px;margin-left:-2px;border-radius:3px;background:var(--ink);box-shadow:0 0 0 3px var(--card)}
-.ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:8px;font-variant-numeric:tabular-nums}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.chip{border:1px solid var(--line);border-radius:12px;padding:6px 12px;font-variant-numeric:tabular-nums;font-weight:600}
+.dial{position:relative;width:min(100%,290px);margin:12px auto 4px}
+.dial::before{content:"";position:absolute;inset:14%;border-radius:50%;background:var(--c);filter:blur(34px);opacity:.22}
+.dial svg{position:relative;display:block;width:100%;height:auto}
+.mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52%;text-align:center}
+.tm{font-size:clamp(26px,9vw,34px);font-weight:300;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.stt{font-size:17px;font-weight:700;margin:7px 0 3px;line-height:1.15;color:var(--mute)}
+.card.on .stt{color:var(--ont)}.card.off .stt{color:var(--gold)}
+.nx{font-size:12px;color:var(--mute);line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}
+.chip{border:1px solid var(--bd);border-radius:12px;padding:6px 12px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
 .chip small{color:var(--mute);font-weight:400;margin-left:8px}
-.chip.now2{border-color:var(--off);background:color-mix(in srgb,var(--off) 16%,transparent)}
-.empty{text-align:center;color:var(--mute);padding:36px 16px;border:2px dashed var(--line);border-radius:20px}
-footer{color:var(--mute);font-size:13px;padding-top:12px}
+.chip.cur{border-color:var(--gold);background:color-mix(in srgb,var(--off2) 16%,transparent)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:40px 16px;border:1px dashed var(--bd);border-radius:24px}
+footer{color:var(--mute);font-size:13px;padding-top:22px}
+@media(prefers-reduced-motion:no-preference){.dial.in svg{animation:sw .9s cubic-bezier(.2,.8,.2,1) both}@keyframes sw{from{opacity:0;transform:rotate(-40deg) scale(.94)}to{opacity:1;transform:none}}}
 </style>
 </head>
 <body>
 <header>
-<h1>Світло на Кіровоградщині</h1>
-<p id="upd">Завантаження…</p>
+<div class="logo"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 2 4 13.5h6L9 22l10-12.5h-6z"/></svg></div>
+<div><h1>Світло Кіровоградщини</h1><p id="upd"><i id="dot"></i><span id="ut">Завантаження…</span></p></div>
 </header>
 <main>
-<form id="f">
-<input id="n" placeholder="Назва адреси, наприклад: Дім, Шевченка 5" maxlength="60" aria-label="Назва адреси">
+<form id="f" class="glass">
+<input id="n" placeholder="Адреса, наприклад: Шевченка 5" maxlength="60" aria-label="Адреса">
 <select id="q" aria-label="Черга"></select>
 <button>Додати</button>
 </form>
-<p class="hint">Не знаєте свою чергу? Перевірте адресу на <a href="https://kiroe.com.ua/electricity-blackout" target="_blank" rel="noopener">сайті Кіровоградобленерго</a> і виберіть її тут. Адреси зберігаються на цьому пристрої.</p>
+<p class="hint">Свою чергу можна дізнатися на <a href="https://kiroe.com.ua/electricity-blackout" target="_blank" rel="noopener">сайті Кіровоградобленерго</a>. Адреси зберігаються на цьому пристрої.</p>
 <div id="warn"></div>
-<div class="tabs" id="tabs"><button data-t="today" class="on">Сьогодні</button><button data-t="tomorrow">Завтра</button></div>
+<div class="bar2"><div class="tabs" id="tabs"><button data-t="today" class="on">Сьогодні</button><button data-t="tomorrow">Завтра</button></div><span id="dt"></span></div>
 <div id="list"></div>
 </main>
 <footer>Дані з офіційних повідомлень Кіровоградобленерго. Неофіційний сайт, час київський. Графік може змінитися за командою Укренерго.</footer>
@@ -78,7 +84,7 @@ footer{color:var(--mute);font-size:13px;padding-top:12px}
 const $=s=>document.querySelector(s);
 const Q=[];for(let i=1;i<=6;i++)Q.push(i+'.1',i+'.2');
 const st={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-let addrs=st.get('addrs',[]),data=st.get('data',null),tab='today',err=false;
+let addrs=st.get('addrs',[]),data=st.get('data',null),tab='today',err=false,first=true;
 const demo=location.hash==='#demo';
 if(!Array.isArray(addrs))addrs=[];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -88,12 +94,13 @@ function kyiv(){
   let p;try{p=f('Europe/Kyiv')}catch(e){p=f('Europe/Kiev')}
   return{date:p.year+'-'+p.month+'-'+p.day,min:+p.hour*60+(+p.minute)};
 }
-const hm=i=>String(Math.floor(i/2)).padStart(2,'0')+':'+(i%2?'30':'00');
+const p2=n=>String(n).padStart(2,'0');
+const hm=i=>p2(Math.floor(i/2))+':'+(i%2?'30':'00');
 const dur=n=>{const m=n*30,h=Math.floor(m/60),r=m%60;return(h?h+' год':'')+(h&&r?' ':'')+(r?r+' хв':'')};
 const left=m=>m>=60?Math.floor(m/60)+' год'+(m%60?' '+m%60+' хв':''):m+' хв';
 const ago=m=>m<1?'щойно':m<60?m+' хв тому':Math.floor(m/60)+' год тому';
 const slots=(q,d)=>{const s=data&&data.days&&data.days[d]&&data.days[d][q];return typeof s==='string'&&s.length===48?s:null};
-function spans(s){const o=[];let i=0;while(i<48){if(s[i]==='0'){let j=i;while(j<48&&s[j]==='0')j++;o.push([i,j]);i=j}else i++}return o}
+function runs(s,ch){const o=[];let i=0;while(i<48){if(s[i]===ch){let j=i;while(j<48&&s[j]===ch)j++;o.push([i,j]);i=j}else i++}return o}
 function mk(){
   const d=kyiv().date,days={};
   [d,addDay(d)].forEach((x,k)=>{days[x]={};Q.forEach((q,i)=>{let s='';for(let j=0;j<48;j++)s+=((j+i*4+k*6)%24<4)?'0':'1';days[x][q]=s})});
@@ -106,42 +113,56 @@ function info(q,n){
   let j=i+1;while(j<s.length&&s[j]===c)j++;
   return{on:c==='1',j,m:j*30-n.min,open:j>=s.length||s[j]==='?'};
 }
+const grad=(id,a,b)=>`<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="40" y1="200" x2="200" y2="40"><stop offset="0" style="stop-color:var(${a})"/><stop offset="1" style="stop-color:var(${b})"/></linearGradient>`;
+function dial(s,n,today){
+  const C=120,R=78,da=(2*Math.PI*R/48-1.3).toFixed(2)+' 1.3';
+  const pt=(a,r)=>[(C+r*Math.cos(a*Math.PI/180)).toFixed(2),(C+r*Math.sin(a*Math.PI/180)).toFixed(2)];
+  const arc=(i,j,stroke)=>{
+    let d;
+    if(j-i>=48)d=`M${C} ${C-R}A${R} ${R} 0 0 1 ${C} ${C+R}A${R} ${R} 0 0 1 ${C} ${C-R}`;
+    else{const a=pt(i*7.5-90,R),b=pt(j*7.5-90,R);d=`M${a[0]} ${a[1]}A${R} ${R} 0 ${j-i>24?1:0} 1 ${b[0]} ${b[1]}`}
+    return`<path d="${d}" fill="none" stroke-width="20" stroke-dasharray="${da}" style="stroke:${stroke}"/>`;
+  };
+  let h=`<svg viewBox="0 0 240 240" role="img" aria-label="Доба по годинах"><defs>${grad('gon','--on1','--on2')}${grad('gof','--off1','--off2')}</defs><circle cx="${C}" cy="${C}" r="62" style="fill:var(--face);stroke:var(--bd)"/>`;
+  for(let k=0;k<24;k++){const m=k%6===0,a=pt(k*15-90,94),b=pt(k*15-90,m?102:98);h+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke-width="${m?1.8:1}" style="stroke:var(--tick)"/>`}
+  for(let k=0;k<24;k+=3){const a=pt(k*15-90,111);h+=`<text x="${a[0]}" y="${a[1]}" text-anchor="middle" dominant-baseline="central" font-size="9.5" style="fill:var(--mute)">${p2(k)}</text>`}
+  h+=arc(0,48,s?'url(#gon)':'var(--na)');
+  if(s){runs(s,'0').forEach(r=>h+=arc(r[0],r[1],'url(#gof)'));runs(s,'?').forEach(r=>h+=arc(r[0],r[1],'var(--na)'))}
+  if(today){const g=n.min/4-90,a=pt(g,64),b=pt(g,96),c=pt(g,R);h+=`<g style="filter:drop-shadow(0 0 4px rgba(255,255,255,.5))"><line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke-width="2.4" stroke-linecap="round" style="stroke:var(--ink)"/><circle cx="${c[0]}" cy="${c[1]}" r="5.2" stroke-width="2" style="fill:var(--ink);stroke:var(--bg)"/></g>`}
+  return h+'</svg>';
+}
 function card(a,k,n,day){
-  const s=slots(a.q,day),today=day===n.date,idx=Math.floor(n.min/30);
-  let cls='na',big='Немає даних',sub=today?'Графік на сьогодні ще не опубліковано':'Графік на завтра ще не опубліковано';
+  const s=slots(a.q,day),today=day===n.date,idx=Math.floor(n.min/30),sp=s?runs(s,'0'):[];
+  let cls='na',stt='Немає даних',nx=today?'Графік ще не опубліковано':'Графік на завтра ще не опубліковано',top=today?p2(Math.floor(n.min/60))+':'+p2(n.min%60):'Завтра';
   if(s){
-    const sp=spans(s),off=sp.reduce((t,x)=>t+x[1]-x[0],0);
+    const off=sp.reduce((t,x)=>t+x[1]-x[0],0);
     if(today){
       const f=info(a.q,n);
-      if(f&&f.na){sub='На цю годину даних немає'}
-      else if(f){
-        cls=f.on?'on':'off';big=f.on?'Світло є':'Світла немає';
-        sub=f.open?'Змін у відомому графіку немає':(f.on?'Вимкнуть':'Увімкнуть')+' о '+hm(f.j%48)+(f.j>=48?' (завтра)':'')+', через '+left(f.m);
-      }
-    }else{big=sp.length?'Відключень: '+sp.length:'Відключень немає';sub=off?'Без світла разом: '+dur(off):'Усю добу зі світлом'}
-    let h='<div class="track"><div class="bar">'+[...s].map(c=>'<i class="'+(c==='0'?'off':c==='1'?'on':'na')+'"></i>').join('')+'</div>'+(today?'<b class="now" style="left:'+(n.min/14.4)+'%"></b>':'')+'</div>';
-    h+='<div class="ticks">'+[0,3,6,9,12,15,18,21,24].map(x=>'<span>'+x+'</span>').join('')+'</div>';
-    if(sp.length)h+='<div class="chips">'+sp.map(x=>'<span class="chip'+(today&&x[0]<=idx&&idx<x[1]?' now2':'')+'">'+hm(x[0])+'–'+hm(x[1])+'<small>'+dur(x[1]-x[0])+'</small></span>').join('')+'</div>';
-    return card2(a,k,cls,big,sub,h);
+      if(f&&f.na)nx='На цю годину даних немає';
+      else if(f){cls=f.on?'on':'off';stt=f.on?'Світло є':'Світла немає';nx=f.open?'Змін у графіку немає':(f.on?'вимкнуть':'увімкнуть')+' о '+hm(f.j%48)+(f.j>=48?' завтра':'')+'<br>ще '+left(f.m)}
+    }else{cls=sp.length?'off':'on';stt=sp.length?'Відключень: '+sp.length:'Без відключень';nx=off?'разом '+dur(off):'усю добу зі світлом'}
   }
-  return card2(a,k,cls,big,sub,'');
+  const chips=sp.length?'<div class="chips">'+sp.map(x=>`<span class="chip${today&&x[0]<=idx&&idx<x[1]?' cur':''}">${hm(x[0])}–${hm(x[1])}<small>${dur(x[1]-x[0])}</small></span>`).join('')+'</div>':'';
+  return`<section class="card ${cls}"><div class="top"><span class="nm">${esc(a.n)}</span><span class="q"><b>Черга ${esc(a.q)}</b><button data-x="${k}" aria-label="Видалити адресу">×</button></span></div><div class="dial${first?' in':''}">${dial(s,n,today)}<div class="mid"><div class="tm">${top}</div><div class="stt">${stt}</div><div class="nx">${nx}</div></div></div>${chips}</section>`;
 }
-const card2=(a,k,cls,big,sub,body)=>'<section class="card '+cls+'"><div class="top"><span class="nm">'+esc(a.n)+'</span><span class="q"><b>Черга '+esc(a.q)+'</b><button data-x="'+k+'" aria-label="Видалити адресу">×</button></span></div><div class="big">'+big+'</div><p class="sub">'+sub+'</p>'+body+'</section>';
 function render(){
   const n=kyiv(),day=tab==='today'?n.date:addDay(n.date);
-  let u='Графік ще не завантажено',w=[];
-  if(data&&data.updated){u='Графік оновлено '+ago(Math.max(0,Math.round((Date.now()-Date.parse(data.updated))/6e4)))}
+  let u='Графік ще не завантажено',w=[],stale=false;
+  if(data&&data.updated)u='Графік оновлено '+ago(Math.max(0,Math.round((Date.now()-Date.parse(data.updated))/6e4)));
   if(demo)w.push('Демо-режим: це вигадані дані, а не справжній графік.');
   else{
     const empty=!data||!data.days||!Object.keys(data.days).length;
     if(empty)w.push('Графік ще не завантажено. Перше оновлення займає кілька хвилин після запуску.');
-    else if(data.checked&&(Date.now()-Date.parse(data.checked))/6e4>180)w.push('Дані могли застаріти: джерело давно не перевірялось.');
+    else if(data.checked&&(Date.now()-Date.parse(data.checked))/6e4>180){stale=true;w.push('Дані могли застаріти: джерело давно не перевірялось.')}
     if(err)w.push('Не вдалося оновити дані, показано останні збережені.');
   }
-  $('#upd').textContent=u;
-  $('#warn').innerHTML=w.map(x=>'<div class="w">'+x+'</div>').join('');
+  $('#ut').textContent=u;
+  $('#dot').style.background=stale||err?'var(--off2)':(data&&data.updated?'var(--on2)':'var(--na)');
+  $('#warn').innerHTML=w.map(x=>`<div class="w">${x}</div>`).join('');
+  $('#dt').textContent=new Date(day+'T12:00:00Z').toLocaleDateString('uk-UA',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'});
   document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
-  $('#list').innerHTML=addrs.length?addrs.map((a,k)=>card(a,k,n,day)).join(''):'<div class="empty">Додайте адресу: введіть назву, виберіть чергу й натисніть «Додати».</div>';
+  $('#list').innerHTML=addrs.length?addrs.map((a,k)=>card(a,k,n,day)).join(''):'<div class="empty">Додайте адресу: введіть її, виберіть чергу й натисніть «Додати».</div>';
+  first=false;
 }
 async function load(){
   if(demo){data=mk();err=false;return render()}
@@ -158,7 +179,7 @@ $('#q').innerHTML=Q.map(q=>'<option value="'+q+'">Черга '+q+'</option>').jo
 $('#q').value=st.get('lastq',Q[0]);
 $('#f').onsubmit=e=>{
   e.preventDefault();
-  const q=$('#q').value,n=$('#n').value.trim()||('Черга '+q);
+  const q=$('#q').value||Q[0],n=$('#n').value.trim()||('Черга '+q);
   if(addrs.length<12&&!addrs.some(a=>a.q===q&&a.n===n)){addrs.push({n,q});st.set('addrs',addrs)}
   st.set('lastq',q);$('#n').value='';render();
 };
