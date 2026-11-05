@@ -166,7 +166,7 @@ footer strong{color:var(--ink);font-weight:700}
       <h2 id="introTitle">Ваш графік електропостачання</h2>
       <p>Додайте адресу та виберіть чергу, щоб бачити години зі світлом і без нього.</p>
     </div>
-    <div class="auto-pill"><i></i> Автоматична перевірка джерела</div>
+    <div class="auto-pill"><i></i> Автоперевірка Telegram · ~5 хв</div>
   </section>
   <form id="f" class="glass">
     <div class="form-top">
@@ -221,6 +221,18 @@ themeToggle.addEventListener('click',()=>setTheme(document.documentElement.datas
 let addrs=st.get('addrs',[]),data=st.get('data',null),tab='today',err=false,first=true;
 const demo=location.hash==='#demo';
 if(!Array.isArray(addrs))addrs=[];
+// On each site entry, show the beginning of the user's saved queue cards.
+// Disable the browser's previous scroll-position restoration so it won't override this.
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+function scrollToSavedQueues(){
+  if(!addrs.length)return;
+  const list=$('.bar2')||$('#list');
+  if(!list)return;
+  const top=list.getBoundingClientRect().top+window.scrollY-12;
+  document.documentElement.style.scrollBehavior='auto';
+  window.scrollTo(0,Math.max(0,top));
+  requestAnimationFrame(()=>{document.documentElement.style.scrollBehavior='smooth'});
+}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const addDay=d=>new Date(Date.parse(d+'T12:00:00Z')+864e5).toISOString().slice(0,10);
 function kyiv(){
@@ -295,17 +307,18 @@ function card(a,k,n,day){
 }
 function render(){
   const n=kyiv(),day=tab==='today'?n.date:addDay(n.date);
-  let u='Графік ще не завантажено',w=[],stale=false;
-  if(data&&data.updated)u='Графік оновлено '+ago(Math.max(0,Math.round((Date.now()-Date.parse(data.updated))/6e4)));
+  let u='Графік ще не завантажено',w=[];
+  if(data&&data.updated)u='Графік востаннє змінено '+ago(Math.max(0,Math.round((Date.now()-Date.parse(data.updated))/6e4)));
   if(demo)w.push('Демо-режим: це вигадані дані, а не справжній графік.');
   else{
     const empty=!data||!data.days||!Object.keys(data.days).length;
     if(empty)w.push('Графік ще не завантажено. Перше оновлення займає кілька хвилин після запуску.');
-    else if(data.checked&&(Date.now()-Date.parse(data.checked))/6e4>180){stale=true;w.push('Дані могли застаріти: джерело давно не перевірялось.')}
-    if(err)w.push('Не вдалося оновити дані, показано останні збережені.');
+    // updated — час останньої зміни графіка, а не час останньої перевірки Telegram.
+    // Перевірка виконується сервером за розкладом; незмінений графік не перепубліковується.
+    if(err)w.push('Не вдалося завантажити останні опубліковані дані, показано збережену копію.');
   }
   $('#ut').textContent=u;
-  $('#dot').style.background=stale||err?'var(--off2)':(data&&data.updated?'var(--on2)':'var(--na)');
+  $('#dot').style.background=err?'var(--off2)':(data&&data.updated?'var(--on2)':'var(--na)');
   $('#warn').innerHTML=w.map(x=>`<div class="w">${x}</div>`).join('');
   $('#dt').textContent=new Date(day+'T12:00:00Z').toLocaleDateString('uk-UA',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'});
   document.querySelectorAll('#tabs button').forEach(b=>{const active=b.dataset.t===tab;b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active))});
@@ -315,7 +328,7 @@ function render(){
 async function load(){
   if(demo){data=mk();err=false;return render()}
   try{
-    // Джерело перевіряє серверний GitHub Actions кожні 5 хвилин; тут перечитуємо опублікований JSON.
+    // Джерело перевіряє серверний GitHub Actions кожні 5 хвилин; сайт читає опублікований JSON раз на хвилину.
     // Унікальний параметр запиту додатково захищає від кешу CDN/браузера.
     const r=await fetch('data/schedule.json?t='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
     if(!r.ok)throw new Error(r.status);
@@ -346,7 +359,12 @@ document.addEventListener('click',e=>{
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});
 setInterval(load,6e4);
 setInterval(render,3e4);
-render();load();
+render();
+// Wait for the first layout, then position the page at the first saved queue.
+requestAnimationFrame(()=>requestAnimationFrame(scrollToSavedQueues));
+// Re-apply after the first data refresh and when returning to the page from browser history.
+load().then(()=>requestAnimationFrame(scrollToSavedQueues));
+window.addEventListener('pageshow',()=>requestAnimationFrame(()=>requestAnimationFrame(scrollToSavedQueues)));
 })();
 </script>
 </body>
